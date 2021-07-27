@@ -1,0 +1,12 @@
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/bin/Debug/net5.0/SchoolPlanner.Core.deps.json
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/bin/Debug/net5.0/SchoolPlanner.Core.dll
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/bin/Debug/net5.0/ref/SchoolPlanner.Core.dll
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/bin/Debug/net5.0/SchoolPlanner.Core.pdb
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.csprojAssemblyReference.cache
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.AssemblyInfoInputs.cache
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.AssemblyInfo.cs
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.csproj.CoreCompileInputs.cache
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.dll
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/ref/SchoolPlanner.Core.dll
+/Users/d0mi/Projects/PortfolioProjects/SchoolPlanner/Website/SchoolPlanner/backend/SchoolPlanner.Core/obj/Debug/net5.0/SchoolPlanner.Core.pdb
