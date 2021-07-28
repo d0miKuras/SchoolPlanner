@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SchoolPlanner.Core;
 
 namespace SchoolPlanner.Data
@@ -12,25 +13,51 @@ namespace SchoolPlanner.Data
         {
             this.db = db;
         }
-        // public Activity AddActivity(Activity newActivity)
-        // {
-        //     List<Activity> list = new List<Activity>();
-        //     foreach (var act in db.Activities)
-        //     {
-        //         if (act.Slot == newActivity.Slot && act.Day == newActivity.Day && (act.Group == newActivity.Group || act.Teacher == newActivity.Teacher))
-        //             list.Add(act);
-        //     }
-        //     foreach (var item in list) db.Activities.Remove(item);
-        //     db.Activities.Add(newActivity);
-        //     return newActivity;
-        // }
+        public int AddActivity(Activity newActivity)
+        {
+            var existingActivity = GetActivities().FirstOrDefault(x => x.Slot == newActivity.Slot && x.Day == newActivity.Day && x.Room.ID == newActivity.Room.ID
+                                                                    && x.Subject.ID == newActivity.Subject.ID && x.Teacher.ID == newActivity.Teacher.ID
+                                                                    && x.Group.ID == newActivity.Group.ID);
+            if (existingActivity != null)
+                return 1;
 
-        // public Group AddGroup(string group)
-        // {
-        //     var newGroup = new Group { Name = group };
-        //     db.Groups.Add(newGroup);
-        //     return newGroup;
-        // }
+            var existingRoom = GetRooms().FirstOrDefault(x => x.ID == newActivity.Room.ID);
+            var existingGroup = GetGroups().FirstOrDefault(x => x.ID == newActivity.Group.ID);
+            var existingTeacher = GetTeachers().FirstOrDefault(x => x.ID == newActivity.Teacher.ID);
+            var existingSubject = GetSubjects().FirstOrDefault(x => x.ID == newActivity.Subject.ID);
+            if (existingRoom == null || existingGroup == null || existingTeacher == null || existingSubject == null)
+                return 2;
+            List<Activity> list = new List<Activity>();
+            foreach (var act in db.Activities)
+            {
+                if (act.Slot == newActivity.Slot && act.Day == newActivity.Day && (act.Group.ID == newActivity.Group.ID || act.Teacher.ID == newActivity.Teacher.ID))
+                    list.Add(act);
+            }
+            db.Activities.RemoveRange(list);
+            db.Activities.Add(new Activity
+            {
+                ID = newActivity.ID,
+                Room = existingRoom,
+                Teacher = existingTeacher,
+                Subject = existingSubject,
+                Group = existingGroup,
+                Slot = newActivity.Slot,
+                Day = newActivity.Day
+            });
+            // db.Activities.Add(newActivity);
+            db.SaveChanges();
+            return 0;
+        }
+
+        public int AddGroup(Group group)
+        {
+            var existingGroup = db.Groups.FirstOrDefault(x => x == group);
+            if (existingGroup != null)
+                return 1;
+            db.Groups.Add(group);
+            db.SaveChanges();
+            return 0;
+        }
 
         // public string AddListItem(string key, string item)
         // {
@@ -52,26 +79,35 @@ namespace SchoolPlanner.Data
         //     return item;
         // }
 
-        public Room AddRoom(Room room)
+        public int AddRoom(Room room)
         {
+            var existingRoom = db.Rooms.FirstOrDefault(x => x.ID == room.ID);
+            if (existingRoom != null)
+                return 1;
             db.Rooms.Add(room);
             db.SaveChanges();
-            return room;
+            return 0;
         }
 
-        // public Subject AddSubject(string subject)
-        // {
-        //     var newSubject = new Subject { Name = subject };
-        //     db.Subjects.Add(newSubject);
-        //     return newSubject;
-        // }
+        public int AddSubject(Subject subject)
+        {
+            var existingSubject = db.Subjects.FirstOrDefault(x => x == subject);
+            if (existingSubject != null)
+                return 1;
+            db.Subjects.Add(subject);
+            db.SaveChanges();
+            return 0;
+        }
 
-        // public Teacher AddTeacher(string teacher)
-        // {
-        //     var newTeacher = new Teacher { Name = teacher };
-        //     db.Teachers.Add(newTeacher);
-        //     return newTeacher;
-        // }
+        public int AddTeacher(Teacher teacher)
+        {
+            var existingTeacher = db.Teachers.FirstOrDefault(x => x == teacher);
+            if (existingTeacher == null)
+                return 1;
+            db.Teachers.Add(teacher);
+            db.SaveChanges();
+            return 0;
+        }
 
         // public int Commit()
         // {
@@ -80,31 +116,27 @@ namespace SchoolPlanner.Data
 
         public bool ContainsRoom(Room room)
         {
-            foreach (var item in db.Rooms)
-            {
-                if (item.ID == room.ID) return true;
-            }
-
-            // var contains = db.Rooms.Contains(room.ID);
+            var existingRoom = db.Rooms.FirstOrDefault(x => x.ID == room.ID);
+            if (existingRoom != null)
+                return true;
             return false;
         }
 
-        // public Group DeleteGroup(string group)
-        // {
-        //     List<Activity> actsToDel = new List<Activity>();
-        //     foreach (var item in db.Activities)
-        //     {
-        //         if (item.Group.Name == group) actsToDel.Add(item);
-        //     }
-        //     var groupToDel = db.Groups.FirstOrDefault(g => g.Name == group);
-        //     db.Groups.Remove(groupToDel);
-        //     foreach (var item in actsToDel)
-        //     {
-        //         db.Activities.Remove(item);
-        //     }
-
-        //     return groupToDel;
-        // }
+        public int DeleteGroup(Group group)
+        {
+            List<Activity> actsToDel = new List<Activity>();
+            foreach (var item in db.Activities)
+            {
+                if (item.Group == group) actsToDel.Add(item);
+            }
+            var groupToDel = db.Groups.FirstOrDefault(g => g == group);
+            if (groupToDel == null)
+                return 1;
+            db.Groups.Remove(groupToDel);
+            db.Activities.RemoveRange(actsToDel);
+            db.SaveChanges();
+            return 0;
+        }
 
         // public string DeleteListItem(string key, string item)
         // {
@@ -130,7 +162,7 @@ namespace SchoolPlanner.Data
         //     return item;
         // }
 
-        public Room DeleteRoom(Room room)
+        public int DeleteRoom(Room room)
         {
             List<Activity> actsToDel = new List<Activity>();
             foreach (var item in db.Activities)
@@ -138,56 +170,56 @@ namespace SchoolPlanner.Data
                 if (item.Room == room) actsToDel.Add(item);
             }
             var roomToDel = db.Rooms.FirstOrDefault(r => r == room);
+            if (roomToDel == null)
+                return 1;
             db.Rooms.Remove(roomToDel);
-            foreach (var item in actsToDel)
-            {
-                db.Activities.Remove(item);
-            }
+            db.Activities.RemoveRange(actsToDel);
             db.SaveChanges();
-            return roomToDel;
-            // return room;
+            return 0;
         }
 
-        // public Subject DeleteSubject(string subject)
-        // {
-        //     List<Activity> actsToDel = new List<Activity>();
-        //     foreach (var item in db.Activities)
-        //     {
-        //         if (item.Subject.Name == subject) actsToDel.Add(item);
-        //     }
-        //     var subjToDel = db.Subjects.FirstOrDefault(s => s.Name == subject);
-        //     db.Subjects.Remove(subjToDel);
-        //     foreach (var item in actsToDel)
-        //     {
-        //         db.Activities.Remove(item);
-        //     }
+        public int DeleteSubject(Subject subject)
+        {
+            List<Activity> actsToDel = new List<Activity>();
+            foreach (var item in db.Activities)
+            {
+                if (item.Subject == subject) actsToDel.Add(item);
+            }
+            var subjToDel = db.Subjects.FirstOrDefault(s => s == subject);
+            if (subjToDel == null)
+                return 1;
+            db.Subjects.Remove(subjToDel);
+            db.Activities.RemoveRange(actsToDel);
+            db.SaveChanges();
+            return 0;
+        }
 
-        //     return subjToDel;
-        // }
+        public int DeleteTeacher(Teacher teacher)
+        {
+            var teachToDel = db.Teachers.FirstOrDefault(r => r == teacher);
+            if (teachToDel == null)
+                return 1;
+            List<Activity> actsToDel = new List<Activity>();
+            foreach (var item in db.Activities)
+            {
+                if (item.Teacher == teacher) actsToDel.Add(item);
+            }
 
-        // public Teacher DeleteTeacher(string teacher)
-        // {
-        //     List<Activity> actsToDel = new List<Activity>();
-        //     foreach (var item in db.Activities)
-        //     {
-        //         if (item.Teacher.Name == teacher) actsToDel.Add(item);
-        //     }
-        //     var teachToDel = db.Teachers.FirstOrDefault(r => r.Name == teacher);
-        //     db.Teachers.Remove(teachToDel);
-        //     foreach (var item in actsToDel)
-        //     {
-        //         db.Activities.Remove(item);
-        //     }
+            db.Teachers.Remove(teachToDel);
+            db.Activities.RemoveRange(actsToDel);
+            db.SaveChanges();
+            return 0;
+        }
 
-        //     return teachToDel;
-        // }
-
-        // public Group EditGroup(string oldGroup, string newGroup)
-        // {
-        //     var group = db.Groups.FirstOrDefault(g => g.Name == oldGroup);
-        //     group.Name = newGroup;
-        //     return group;
-        // }
+        public int EditGroup(Group oldGroup, Group newGroup)
+        {
+            var group = db.Groups.FirstOrDefault(g => g.ID == oldGroup.ID);
+            if (group == null)
+                return 1;
+            group.Name = newGroup.Name;
+            db.SaveChanges();
+            return 0;
+        }
 
         // public string EditListItem(string key, string oldItem, string newItem)
         // {
@@ -212,88 +244,194 @@ namespace SchoolPlanner.Data
         //     return newItem;
         // }
 
-        public Room EditRoom(Room oldRoom, Room newRoom)
+        public int EditRoom(Room oldRoom, Room newRoom)
         {
             var room = db.Rooms.FirstOrDefault(r => r.ID == oldRoom.ID);
-            if (room != null)
-                room.Name = newRoom.Name;
+            if (room == null)
+                return 1;
+            room.Name = newRoom.Name;
 
             db.SaveChanges();
-            return room;
+            return 0;
         }
 
-        // public Subject EditSubject(string oldSubject, string newSubject)
-        // {
-        //     var subj = db.Subjects.FirstOrDefault(s => s.Name == oldSubject);
-        //     subj.Name = newSubject;
-        //     return subj;
-        // }
+        public int EditSubject(Subject oldSubject, Subject newSubject)
+        {
+            var subj = db.Subjects.FirstOrDefault(s => s.ID == oldSubject.ID);
+            if (subj == null)
+                return 1;
+            subj.Name = newSubject.Name;
+            db.SaveChanges();
+            return 0;
+        }
 
-        // public Teacher EditTeacher(string oldTeacher, string newTeacher)
-        // {
-        //     var teacher = db.Teachers.FirstOrDefault(t => t.Name == oldTeacher);
-        //     teacher.Name = newTeacher;
-        //     // check if it automatically changes in activities
-        //     return teacher;
-        // }
+        public int EditTeacher(Teacher oldTeacher, Teacher newTeacher)
+        {
+            var teacher = db.Teachers.FirstOrDefault(t => t == oldTeacher);
+            if (teacher == null)
+                return 1;
+            teacher.Name = newTeacher.Name;
+            db.SaveChanges();
+            // check if it automatically changes in activities
+            return 0;
+        }
 
-        // public IEnumerable<Activity> GetActivitiesByRoom(string room)
-        // {
-        //     List<Activity> returnList = new List<Activity>();
-        //     foreach (var act in db.Activities)
-        //     {
-        //         if (act.Room.Name == room) returnList.Add(act);
-        //     }
-        //     return returnList;
-        // }
+        public IEnumerable<Activity> GetActivitiesByRoom(Room room)
+        {
+            return db.Activities.Include(i => i.Teacher)
+                                .Include(i => i.Subject)
+                                .Include(i => i.Room)
+                                .Include(i => i.Group)
+                                .Where(x => x.Room == room)
+                                .ToList();
+        }
 
-        // public Activity GetActivity(string room, int slot, int day)
-        // {
-        //     return db.Activities.FirstOrDefault(a => a.Room.Name == room && a.Slot == slot && a.Day == day);
-        // }
+        public Activity GetActivity(Room room, int slot, int day)
+        {
+            return db.Activities.FirstOrDefault(a => a.Room == room && a.Slot == slot && a.Day == day);
+        }
 
-        // public IEnumerable<Group> GetGroups()
-        // {
-        //     return db.Groups;
-        // }
+        public IEnumerable<Group> GetGroupsAsNoTracking()
+        {
+            return db.Groups.AsNoTracking().ToList();
+        }
 
         public PlannerData GetPlannerData()
         {
             throw new System.NotImplementedException();
         }
 
+        public IEnumerable<Room> GetRoomsAsNoTracking()
+        {
+            return db.Rooms.AsNoTracking().ToList();
+        }
+
+        public IEnumerable<Subject> GetSubjectsAsNoTracking()
+        {
+            return db.Subjects.AsNoTracking().ToList();
+        }
+
+        public IEnumerable<Teacher> GetTeachersAsNoTracking()
+        {
+            return db.Teachers.AsNoTracking().ToList();
+        }
+
+        public IEnumerable<Activity> GetActivities()
+        {
+            // var acts = db.Activities;
+            return db.Activities.Include(i => i.Teacher)
+                                .Include(i => i.Subject)
+                                .Include(i => i.Room)
+                                .Include(i => i.Group)
+                                .ToList();
+        }
+
+        public IEnumerable<Activity> GetActivitiesAsNoTracking()
+        {
+            // var acts = db.Activities;
+            return db.Activities.Include(i => i.Teacher).AsNoTracking()
+                                .Include(i => i.Subject).AsNoTracking()
+                                .Include(i => i.Room).AsNoTracking()
+                                .Include(i => i.Group).AsNoTracking()
+                                .ToList();
+        }
+
+        public int RemoveActivity(Activity remAct)
+        {
+            var existingActivity = GetActivities().FirstOrDefault(x => x.Slot == remAct.Slot && x.Day == remAct.Day && x.Room.ID == remAct.Room.ID
+                                                                    && x.Subject.ID == remAct.Subject.ID && x.Teacher.ID == remAct.Teacher.ID
+                                                                    && x.Group.ID == remAct.Group.ID);
+            if (existingActivity == null)
+                return 1;
+
+            var existingRoom = GetRoomsAsNoTracking().FirstOrDefault(x => x.ID == remAct.Room.ID);
+            var existingGroup = GetGroupsAsNoTracking().FirstOrDefault(x => x.ID == remAct.Group.ID);
+            var existingTeacher = GetTeachersAsNoTracking().FirstOrDefault(x => x.ID == remAct.Teacher.ID);
+            var existingSubject = GetSubjectsAsNoTracking().FirstOrDefault(x => x.ID == remAct.Subject.ID);
+            if (existingRoom == null || existingGroup == null || existingTeacher == null || existingSubject == null)
+                return 2;
+
+            db.Activities.Remove(existingActivity);
+            // db.Activities.Remove(new Activity
+            // {
+            //     Room = existingRoom,
+            //     Teacher = existingTeacher,
+            //     Subject = existingSubject,
+            //     Group = existingGroup,
+            //     Slot = remAct.Slot,
+            //     Day = remAct.Day
+            // });
+            db.SaveChanges();
+            return 0;
+        }
+
+
         public IEnumerable<Room> GetRooms()
         {
             return db.Rooms;
         }
 
-        // public IEnumerable<Subject> GetSubjects()
-        // {
-        //     return db.Subjects;
-        // }
+        public IEnumerable<Teacher> GetTeachers()
+        {
+            return db.Teachers;
+        }
 
-        // public IEnumerable<Teacher> GetTeachers()
-        // {
-        //     return db.Teachers;
-        // }
+        public IEnumerable<Subject> GetSubjects()
+        {
+            return db.Subjects;
+        }
 
-        // public Activity RemoveActivity(Activity remAct)
-        // {
-        //     db.Activities.Remove(remAct);
-        //     return remAct;
-        // }
+        public IEnumerable<Group> GetGroups()
+        {
+            return db.Groups;
+        }
 
-        // public Activity UpdateActivities(Activity updatedAct)
-        // {
-        //     var act = db.Activities.FirstOrDefault(a => a.Room == updatedAct.Room && a.Slot == updatedAct.Slot && a.Day == updatedAct.Day);
-        //     if (act != null)
-        //     {
-        //         act.Group = updatedAct.Group;
-        //         act.Teacher = updatedAct.Teacher;
-        //         act.Subject = updatedAct.Subject;
-        //     }
-        //     else AddActivity(updatedAct);
-        //     return act;
-        // }
+        public int EditActivity(Activity oldAct, Activity newAct)
+        {
+            var act = GetActivities().FirstOrDefault(a => a.Room.ID == oldAct.Room.ID && a.Slot == oldAct.Slot && a.Day == oldAct.Day);
+            // var act = db.Activities.Include(i => i.Teacher).AsNoTracking()
+            //                     .Include(i => i.Subject).AsNoTracking()
+            //                     .Include(i => i.Room).AsNoTracking()
+            //                     .Include(i => i.Group).AsNoTracking()
+            //                     .ToList().FirstOrDefault(a => a.Room.ID == oldAct.Room.ID && a.Slot == oldAct.Slot && a.Day == oldAct.Day);
+            if (act == null)
+                return 1;
+            var existingGroup = GetGroupsAsNoTracking().FirstOrDefault(x => x.ID == newAct.Group.ID);
+            var existingTeacher = GetTeachersAsNoTracking().FirstOrDefault(x => x.ID == newAct.Teacher.ID);
+            var existingSubject = GetSubjectsAsNoTracking().FirstOrDefault(x => x.ID == newAct.Subject.ID);
+            if (existingGroup == null || existingTeacher == null || existingSubject == null)
+                return 2;
+
+
+            // db.Activities.Remove(act);
+            Activity newActivity = new Activity // to give id
+            {
+                ID = oldAct.ID,
+                Room = newAct.Room,
+                Subject = newAct.Subject,
+                Teacher = newAct.Teacher,
+                Group = newAct.Group,
+                Day = newAct.Day,
+                Slot = newAct.Slot
+            };
+            // act.Group = existingGroup;
+            // act.Teacher = existingTeacher;
+            // act.Subject = existingSubject;
+            RemoveActivity(oldAct);
+            AddActivity(newActivity);
+            // db.Activities.Add(new Activity
+            // {
+            //     ID = act.ID,
+            //     Room = act.Room,
+            //     Slot = act.Slot,
+            //     Day = act.Day,
+            //     Group = existingGroup,
+            //     Teacher = existingTeacher,
+            //     Subject = existingSubject
+            // });
+            // db.SaveChanges();
+
+            return 0;
+        }
     }
 }

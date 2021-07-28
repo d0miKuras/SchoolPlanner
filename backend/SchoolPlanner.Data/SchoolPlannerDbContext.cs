@@ -14,9 +14,5 @@ namespace SchoolPlanner.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Group> Groups { get; set; }
 
-        // protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //     => options.UseMySql("server=localhost;user=root;database=schoolplanner;port=3306;Connect Timeout=5;",
-        //     new MariaDbServerVersion(new Version(10, 4, 19)));
-
     }
 }

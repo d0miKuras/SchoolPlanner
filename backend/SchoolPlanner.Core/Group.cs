@@ -1,5 +1,3 @@
-// using SchoolPlanner.API;
-
 namespace SchoolPlanner.Core
 {
     public class Group

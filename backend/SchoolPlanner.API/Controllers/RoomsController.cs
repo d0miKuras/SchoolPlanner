@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using SchoolPlanner.Core;
 using SchoolPlanner.Data;
 
@@ -13,12 +8,12 @@ namespace SchoolPlanner.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RoomController : ControllerBase
+    public class RoomsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly ISchoolPlannerData _plannerData;
 
-        public RoomController(IConfiguration configuration, ISchoolPlannerData plannerData)
+        public RoomsController(IConfiguration configuration, ISchoolPlannerData plannerData)
         {
             _configuration = configuration;
             _plannerData = plannerData;
@@ -50,7 +45,7 @@ namespace SchoolPlanner.API.Controllers
             {
                 var oldRoom = _plannerData.GetRooms().FirstOrDefault(r => r.ID == room.ID);
                 _plannerData.EditRoom(oldRoom, room);
-                return new JsonResult("Edited room with ID {room.ID} successfully!");
+                return new JsonResult($"Edited room with ID {room.ID} successfully!");
             }
             return new JsonResult($"There is no room with ID {room.ID}!");
         }
@@ -62,7 +57,7 @@ namespace SchoolPlanner.API.Controllers
                 return new JsonResult("The room does not exist!");
 
             var del = _plannerData.DeleteRoom(room);
-            return new JsonResult($"Room {del.Name} with ID {del.ID} has been deleted!");
+            return new JsonResult("Room has been deleted!");
         }
     }
 }

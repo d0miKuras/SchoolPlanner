@@ -8,37 +8,46 @@ namespace SchoolPlanner.Data
     public interface ISchoolPlannerData
     {
         PlannerData GetPlannerData();
+        IEnumerable<Room> GetRoomsAsNoTracking();
+        IEnumerable<Teacher> GetTeachersAsNoTracking();
+        IEnumerable<Subject> GetSubjectsAsNoTracking();
+        IEnumerable<Group> GetGroupsAsNoTracking();
         IEnumerable<Room> GetRooms();
-        // IEnumerable<Teacher> GetTeachers();
-        // IEnumerable<Subject> GetSubjects();
-        // IEnumerable<Group> GetGroups();
+        IEnumerable<Teacher> GetTeachers();
+        IEnumerable<Subject> GetSubjects();
+        IEnumerable<Group> GetGroups();
+        IEnumerable<Activity> GetActivities();
 
-        Room AddRoom(Room room);
-        Room EditRoom(Room oldRoom, Room newRoom);
-        Room DeleteRoom(Room room);
-        // Teacher AddTeacher(string teacher);
-        // Teacher EditTeacher(string oldTeacher, string newTeacher);
-        // Teacher DeleteTeacher(string teacher);
-        // Group AddGroup(string group);
-        // Group EditGroup(string oldGroup, string newGroup);
-        // Group DeleteGroup(string group);
-        // Subject AddSubject(string subject);
-        // Subject EditSubject(string oldSubject, string newSubject);
-        // Subject DeleteSubject(string subject);
-        // Activity GetActivity(string room, int slot, int day);
+        int AddRoom(Room room);
+        int EditRoom(Room oldRoom, Room newRoom);
+        int DeleteRoom(Room room);
+
+        int AddTeacher(Teacher teacher);
+        int EditTeacher(Teacher oldTeacher, Teacher newTeacher);
+        int DeleteTeacher(Teacher teacher);
+
+        int AddGroup(Group group);
+        int EditGroup(Group oldGroup, Group newGroup);
+        int DeleteGroup(Group group);
+
+        int AddSubject(Subject subject);
+        int EditSubject(Subject oldSubject, Subject newSubject);
+        int DeleteSubject(Subject subject);
+
+        Activity GetActivity(Room room, int slot, int day);
 
         bool ContainsRoom(Room room);
 
-        // Activity UpdateActivities(Activity updatedAct);
-        // Activity AddActivity(Activity newActivity);
-        // Activity RemoveActivity(Activity remAct);
+        int EditActivity(Activity oldAct, Activity newAct);
+        int AddActivity(Activity newActivity);
+        int RemoveActivity(Activity remAct);
 
         // string AddListItem(string key, string item);
         // string EditListItem(string key, string oldItem, string newItem);
 
         // string DeleteListItem(string key, string item);
         // int Commit();
-        // IEnumerable<Activity> GetActivitiesByRoom(string room);
+        IEnumerable<Activity> GetActivitiesByRoom(Room room);
 
     }
 

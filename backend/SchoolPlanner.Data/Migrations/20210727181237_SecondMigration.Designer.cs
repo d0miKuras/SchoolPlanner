@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolPlanner.Data;
 
 namespace SchoolPlanner.Data.Migrations
 {
     [DbContext(typeof(SchoolPlannerDbContext))]
-    partial class SchoolPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210727181237_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
