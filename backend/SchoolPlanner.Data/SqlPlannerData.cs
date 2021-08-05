@@ -81,7 +81,7 @@ namespace SchoolPlanner.Data
 
         public int AddRoom(Room room)
         {
-            var existingRoom = db.Rooms.FirstOrDefault(x => x.Name == room.Name);
+            var existingRoom = db.Rooms.FirstOrDefault(x => x == room);
             if (existingRoom != null)
                 return 1;
             // if (room.ID == null) room.ID = db.Rooms.Find(room => Max(room.ID)).ID + 1;
@@ -103,7 +103,7 @@ namespace SchoolPlanner.Data
         public int AddTeacher(Teacher teacher)
         {
             var existingTeacher = db.Teachers.FirstOrDefault(x => x == teacher);
-            if (existingTeacher == null)
+            if (existingTeacher != null)
                 return 1;
             db.Teachers.Add(teacher);
             db.SaveChanges();

@@ -3,9 +3,9 @@ import './App.css';
 
 import { Home } from './Home';
 import { Rooms } from './Rooms/Rooms';
-import { Teachers } from './Teachers';
-import { Groups } from './Groups';
-import { Subjects } from './Subjects';
+import { Teachers } from './Teachers/Teachers';
+import { Groups } from './Groups/Groups';
+import { Subjects } from './Subjects/Subjects';
 import { Navigation } from './Navigation';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';

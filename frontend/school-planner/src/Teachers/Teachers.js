@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import { AddRoomModal } from './AddRoomModal';
-import { EditRoomModal } from './EditRoomModal';
+import { AddTeacherModal } from './AddTeacherModal';
+import { EditTeacherModal } from './EditTeacherModal';
 
-export class Rooms extends React.Component{
+export class Teachers extends React.Component{
+
     constructor(props) {
         super(props);
-        this.state = {rooms:[], addModalShow:false, editModalShow:false}
+
+        this.state = { teachers: [], addModalShow: false, editModalShow: false}
     }
 
     refreshList() {
-        fetch(process.env.REACT_APP_API + 'rooms')
+        fetch(process.env.REACT_APP_API + 'teachers')
             .then(response => response.json())
             .then(data => {
-                this.setState({ rooms: data });
+                this.setState({ teachers: data });
             });
     }
 
@@ -27,16 +29,16 @@ export class Rooms extends React.Component{
         this.refreshList();
     }
 
-    deleteRoom(roomID) {
+    deleteTeacher(teacherID) {
         if (window.confirm('Are you sure?')) {
-            fetch(process.env.REACT_APP_API + 'rooms', {
+            fetch(process.env.REACT_APP_API + 'teachers', {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type':'application/json'
                 },
                 body: JSON.stringify({
-                    ID: roomID
+                    ID: teacherID
                 })
             })
             .then(res => res.json())
@@ -49,57 +51,54 @@ export class Rooms extends React.Component{
         }
     }
     render() {
-        const { rooms, roomName, roomID } = this.state;
+        const { teachers, teacherName, teacherID } = this.state;
         let addModalClose = () => this.setState({ addModalShow: false });
         let editModalClose = () => this.setState({ editModalShow: false });
-        return(
-            
+        return (
             <div>
                 <Table className='mt-4' striped hover bordered variant='light'>
                     <thead variant='light'>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Options</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Options</th>
                     </thead>
                     <tbody>
-                        {rooms.map(room =>
-                            <tr key={room.ID}>
-                                <td>{room.ID}</td>
-                                <td>{room.Name}</td>
-                                <td size='sm'>
+                        {teachers.map(teacher =>
+                            <tr key={teacher.ID}>
+                                <td>{teacher.ID}</td>
+                                <td>{teacher.Name}</td>
+                                <td>
                                     <ButtonToolbar>
                                         <div className='mx-2'><Button variant='info'
                                             onClick={() => this.setState({
                                                 editModalShow: true,
-                                                roomID: room.ID,
-                                                roomName: room.Name
+                                                teacherID: teacher.ID,
+                                                teacherName: teacher.Name
                                             })}>Edit</Button>
                                         </div>
                                         <div className='mx-2'>
                                             <Button variant='danger'
-                                            onClick={() => this.deleteRoom(room.ID)}>Delete</Button>
+                                            onClick={() => this.deleteTeacher(teacher.ID)}>Delete</Button>
                                         </div>
-                                        
-                                        <EditRoomModal show={this.state.editModalShow}
+
+                                        <EditTeacherModal show={this.state.editModalShow}
                                             onHide={editModalClose}
-                                            roomID={roomID}
-                                            roomName={roomName}
+                                            teacherID={teacherID}
+                                            teacherName={teacherName}
                                             />
                                     </ButtonToolbar>
-                                    {/* <ButtonToolbar>
-
-                                    </ButtonToolbar> */}
                                 </td>
-                            </tr>)
-                        }
+
+                            </tr>)}
                     </tbody>
+                    
                 </Table>
                 <ButtonToolbar>
-                    <Button variant='primary' onClick={() => this.setState({ addModalShow: true })}>Add Room</Button>
-                    <AddRoomModal show={this.state.addModalShow} onHide={ addModalClose}></AddRoomModal>
+                    <Button variant='primary' onClick={() => this.setState({ addModalShow: true })}>Add Teacher</Button>
+                    <AddTeacherModal show={this.state.addModalShow} onHide={ addModalClose}></AddTeacherModal>
                 </ButtonToolbar>
             </div>
-        );
+        ); 
     }
     
 }
