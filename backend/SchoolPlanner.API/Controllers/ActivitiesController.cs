@@ -20,10 +20,10 @@ namespace SchoolPlanner.API.Controllers
             _plannerData = plannerData;
         }
 
-        [HttpGet("{room.Name}")]
-        public JsonResult Get(Room room)
+        [HttpGet("{roomName}")]
+        public JsonResult Get(string roomName)
         {
-            var activities = _plannerData.GetActivitiesByRoom(room);
+            var activities = _plannerData.GetActivitiesByRoom(roomName);
             return new JsonResult(activities);
         }
 

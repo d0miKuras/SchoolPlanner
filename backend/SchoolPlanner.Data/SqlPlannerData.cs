@@ -277,13 +277,13 @@ namespace SchoolPlanner.Data
             return 0;
         }
 
-        public IEnumerable<Activity> GetActivitiesByRoom(Room room)
+        public IEnumerable<Activity> GetActivitiesByRoom(string roomName)
         {
             return db.Activities.Include(i => i.Teacher)
                                 .Include(i => i.Subject)
                                 .Include(i => i.Room)
                                 .Include(i => i.Group)
-                                .Where(x => x.Room == room)
+                                .Where(x => x.Room.Name == roomName)
                                 .ToList();
         }
 
