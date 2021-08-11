@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown} from 'react-bootstrap';
 import Calendar from './Calendar';
 
 
 
-
+// const SchoolPlanner = (props) => {
+//     const [rooms, setRooms] = useState([]);
+//     const [activities, setActivities] = useState([]);
+//     const [activeRoomString, setActiveRoomString] = useState('Select room in the dropdown menu:');
+//     const [loadCalendar, setLoadCalendar] = useState(false);
+//     const [activeRoom, setActiveRoom] = useState('');
+//     const [activeRoomID, setActiveRoomID] = useState(0);
+// }
 export class SchoolPlanner extends React.Component{
     constructor(props) {
         super(props);
@@ -27,12 +34,7 @@ export class SchoolPlanner extends React.Component{
 
 
     render() {
-        // this.refreshList();
         const { rooms, activeRoom, activeRoomString, activeRoomID, activities} = this.state;
-        // let handleRoomSelect = (name) => this.setState({ activeRoom: name });
-        // let calendar = <h6>Please select a room</h6>
-        // if (this.state.loadCalendar)
-        //     calendar = <Calendar activities={activities} activeRoom={activeRoom} activeRoomID={activeRoomID}/>
         return (
             <div>
                 <div>
@@ -55,7 +57,7 @@ export class SchoolPlanner extends React.Component{
                     </Dropdown>
                 </div>
                 <div>
-                    <Calendar selectedRoom={activeRoom}/>
+                    <Calendar selectedRoomID={activeRoomID} selectedRoomName={activeRoom}/>
                 </div>
             </div>
         );

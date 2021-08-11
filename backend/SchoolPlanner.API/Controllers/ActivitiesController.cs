@@ -20,14 +20,14 @@ namespace SchoolPlanner.API.Controllers
             _plannerData = plannerData;
         }
 
-        [HttpGet("{roomName}")]
-        public JsonResult Get(string roomName)
+        [HttpGet("{roomID}")]
+        public JsonResult Get(int roomID)
         {
-            var activities = _plannerData.GetActivitiesByRoom(roomName);
+            var activities = _plannerData.GetActivitiesByRoom(roomID);
             return new JsonResult(activities);
         }
 
-        [HttpPost("{activity.Room.Id}/{activity.day}/{activity.slot}")]
+        [HttpPost]
         public JsonResult Post(Activity activity)
         {
             var returnCode = _plannerData.AddActivity(activity);

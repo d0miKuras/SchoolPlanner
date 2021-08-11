@@ -277,13 +277,13 @@ namespace SchoolPlanner.Data
             return 0;
         }
 
-        public IEnumerable<Activity> GetActivitiesByRoom(string roomName)
+        public IEnumerable<Activity> GetActivitiesByRoom(int roomID)
         {
             return db.Activities.Include(i => i.Teacher)
                                 .Include(i => i.Subject)
                                 .Include(i => i.Room)
                                 .Include(i => i.Group)
-                                .Where(x => x.Room.Name == roomName)
+                                .Where(x => x.Room.ID == roomID)
                                 .ToList();
         }
 
@@ -299,7 +299,15 @@ namespace SchoolPlanner.Data
 
         public PlannerData GetPlannerData()
         {
-            throw new System.NotImplementedException();
+            PlannerData planner = new PlannerData
+            {
+                Activities = GetActivities().ToList(),
+                Rooms = GetRooms().ToList(),
+                Groups = GetGroups().ToList(),
+                Teachers = GetTeachers().ToList(),
+                Subjects = GetSubjects().ToList()
+            };
+            return planner;
         }
 
         public IEnumerable<Room> GetRoomsAsNoTracking()

@@ -47,7 +47,7 @@ namespace SchoolPlanner.Data
 
         // string DeleteListItem(string key, string item);
         // int Commit();
-        IEnumerable<Activity> GetActivitiesByRoom(string roomName);
+        IEnumerable<Activity> GetActivitiesByRoom(int roomID);
 
     }
 
