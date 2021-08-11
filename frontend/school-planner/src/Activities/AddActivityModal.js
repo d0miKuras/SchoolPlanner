@@ -46,7 +46,15 @@ const AddActivityModal = (props) => {
                     props.onHide();
                 }, (error) => {
                     alert('Failed');
-        })
+                })
+        // console.log({
+        //     Room: props.selectedRoom,
+        //     Group: selectedGroup,
+        //     Teacher: selectedTeacher,
+        //     Subject: selectedSubject,
+        //     Slot: props.slot,
+        //     Day: props.day
+        // });
         
     }
 
@@ -76,7 +84,8 @@ const RoomList = (props) => {
 const GroupList = (props) => {
     return (
         <div>
-            <Form.Control as='select' custom onChange={(event) => { props.setSelectedGroup({ ID: event.target.value } )}} required>
+            <Form.Control as='select' custom onChange={(event) => { props.setSelectedGroup({ ID: event.target.value }) }} required>
+                <option>select...</option>
                 {props.groups.map((group) => {
                     return <option value={group.ID}>{group.Name}</option>
                 })}
@@ -88,7 +97,8 @@ const GroupList = (props) => {
 const TeacherList = (props) => {
     return (
         <div>
-            <Form.Control as='select' custom onChange={(event) => { props.setSelectedTeacher({ID: event.target.value})}} required>
+            <Form.Control as='select' custom onChange={(event) => { props.setSelectedTeacher({ ID: event.target.value }) }} required>
+                <option>select...</option>
                 {props.teachers.map((teacher) => {
                     return <option value={teacher.ID}>{teacher.Name}</option>
                 })}
@@ -99,7 +109,8 @@ const TeacherList = (props) => {
 const SubjectList = (props) => {
     return (
         <div>
-            <Form.Control as='select' custom onChange={(event) => { props.setSelectedSubject({ ID: event.target.value})}} required>
+            <Form.Control as='select' custom onChange={(event) => { props.setSelectedSubject({ ID: event.target.value }) }} required>
+                <option>select...</option>
                 {props.subjects.map((subject) => {
                     return <option value={subject.ID}>{subject.Name}</option>
                 })}
