@@ -34,16 +34,20 @@ export class SchoolPlanner extends React.Component{
 
 
     render() {
-        const { rooms, activeRoom, activeRoomString, activeRoomID, activities} = this.state;
+        const { rooms, activeRoom, activeRoomString, activeRoomID, activities } = this.state;
+        let calendar = <h6 style={{ color: 'red' }}>Please select a room!</h6>
+        if (activeRoomID != 0) {
+            calendar = <Calendar selectedRoomID={activeRoomID} selectedRoomName={activeRoom}/>
+        }
         return (
             <div>
                 <div>
-                    <h6>{ activeRoomString }</h6>
+                    <h6>Room:</h6>
                     
                     {/* <DropDownRoomSelect rooms={rooms}/> */}
                     <Dropdown renderMenuOnMount={false}>
                         <Dropdown.Toggle variant="light" id="dropdown-basic">
-                            Select Room
+                            {activeRoom}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
@@ -57,7 +61,8 @@ export class SchoolPlanner extends React.Component{
                     </Dropdown>
                 </div>
                 <div>
-                    <Calendar selectedRoomID={activeRoomID} selectedRoomName={activeRoom}/>
+                    {/* <Calendar selectedRoomID={activeRoomID} selectedRoomName={activeRoom}/> */}
+                    {calendar}
                 </div>
             </div>
         );

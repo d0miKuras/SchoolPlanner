@@ -46,7 +46,7 @@ namespace SchoolPlanner.API.Controllers
             if (oldAct != null)
             {
                 _plannerData.EditActivity(oldAct, newActivity);
-                return new JsonResult($"Edited activity with ID {newActivity.ID} successfully!");
+                return new JsonResult($"Edited activity with ID successfully!");
             }
             return new JsonResult($"There is no activity with ID {newActivity.ID}!");
         }
@@ -58,7 +58,7 @@ namespace SchoolPlanner.API.Controllers
             if (returnCode == 0)
                 return new JsonResult("Successfully removed!");
             else if (returnCode == 1)
-                return new JsonResult("This activity does not exist!");
+                return new JsonResult("This activity does not exist, try again!");
             else
                 return new JsonResult("Either the room, the group, the teacher or the subject do not exist");
         }
