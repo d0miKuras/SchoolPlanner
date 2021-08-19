@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/SchoolPlanner/static/css/main.a617e044.chunk.css",
+    "main.js": "/SchoolPlanner/static/js/main.88fa58f3.chunk.js",
+    "main.js.map": "/SchoolPlanner/static/js/main.88fa58f3.chunk.js.map",
+    "runtime-main.js": "/SchoolPlanner/static/js/runtime-main.74048240.js",
+    "runtime-main.js.map": "/SchoolPlanner/static/js/runtime-main.74048240.js.map",
+    "static/js/2.0e2535f4.chunk.js": "/SchoolPlanner/static/js/2.0e2535f4.chunk.js",
+    "static/js/2.0e2535f4.chunk.js.map": "/SchoolPlanner/static/js/2.0e2535f4.chunk.js.map",
+    "static/js/3.73272f5e.chunk.js": "/SchoolPlanner/static/js/3.73272f5e.chunk.js",
+    "static/js/3.73272f5e.chunk.js.map": "/SchoolPlanner/static/js/3.73272f5e.chunk.js.map",
+    "index.html": "/SchoolPlanner/index.html",
+    "static/css/main.a617e044.chunk.css.map": "/SchoolPlanner/static/css/main.a617e044.chunk.css.map",
+    "static/js/2.0e2535f4.chunk.js.LICENSE.txt": "/SchoolPlanner/static/js/2.0e2535f4.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/SchoolPlanner/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.74048240.js",
+    "static/js/2.0e2535f4.chunk.js",
+    "static/css/main.a617e044.chunk.css",
+    "static/js/main.88fa58f3.chunk.js"
+  ]
+}
